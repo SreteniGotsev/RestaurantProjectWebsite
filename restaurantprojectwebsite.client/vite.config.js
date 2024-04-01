@@ -7,7 +7,7 @@ import path from 'path';
 import child_process from 'child_process';
 
 const baseFolder =
-    process.env.APPDATA !== undefined && process.env.APPDATA !== ''
+      process.env.APPDATA !== undefined && process.env.APPDATA !== ''
         ? `${process.env.APPDATA}/ASP.NET/https`
         : `${process.env.HOME}/.aspnet/https`;
 
@@ -39,22 +39,50 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
-    },
+    //resolve: {
+    //    alias: {
+    //        '@': fileURLToPath(new URL('./src', import.meta.url))
+    //    }
+    //},
     server: {
         proxy: {
-            '^/weatherforecast': {
-                target: 'https://localhost:5001/',
-                secure: false
-            }
+            '/home': {
+                target: 'http://127.0.0.1:5116/',
+             
+            },
+    //        '/isAuth': {
+    //            target: 'http://localhost:5001/',
+          
+    //        },
+            '/register': {
+                target: 'http://127.0.0.1:5116/',
+               
+            },
+            '/login': {
+                target: 'http://127.0.0.1:5116/',  
+            },
+    //        '/loguot': {
+    //            target: 'http://localhost:5116/',
+               
+    //        }
+    //        //'^/weatherforecast': {
+    //        //    target: 'https://localhost:5001/',
+    //        //    secure: false
+    //        //},
+    //        //'^/weatherforecast': {
+    //        //    target: 'https://localhost:5001/',
+    //        //    secure: false
+    //        //},
+    //        //'^/weatherforecast': {
+    //        //    target: 'https://localhost:5001/',
+    //        //    secure: false
+    //        //}         
         },
-        port: 5173,
-        https: {
-            key: fs.readFileSync(keyFilePath),
-            cert: fs.readFileSync(certFilePath),
-        }
+        host: "127.0.0.1",
+        port: 8000,
+        //https: {
+        //    key: fs.readFileSync(keyFilePath),
+        //    cert: fs.readFileSync(certFilePath),
+        //}
     }
 })
