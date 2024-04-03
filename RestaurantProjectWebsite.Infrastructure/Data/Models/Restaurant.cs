@@ -33,7 +33,7 @@ namespace RestaurantProjectWebsite.Infrastructure.Data.Models
         public ICollection<Order> Order { get; set; } = new List<Order>();
         public ICollection<int> Tables { get; set; } = new List<int>();
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
 
     }
