@@ -42,6 +42,8 @@ namespace RestaurantProjectWebsite.Server
             builder.Services.AddScoped<IRestaurantService, RestaurantService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
             builder.Services.AddAuthorization();
 

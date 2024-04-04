@@ -13,7 +13,7 @@ namespace RestaurantProjectWebsite.Core.Contracts
         Task<RestaurantVM> GetRestauratById(string id);
         List<RestaurantVMShort> GetAll();
         List<RestaurantVMShort> GetAllByCategory(string category);
-        Task<bool> AddRestaurant(string restaurantId);
+        Task<bool> AddRestaurant(RestaurantVM restaurantVm);
         Task<bool> UpdateRestaurant(RestaurantVM restaurant);
         Task<bool> RemoveRestaurant(string restaurantId);
     }

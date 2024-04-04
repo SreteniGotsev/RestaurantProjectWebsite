@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using RestauranProjectWebsite.Infrastructure.Repositories;
 using RestaurantProjectWebsite.Core.Contracts;
+using RestaurantProjectWebsite.Core.ViewModels.ProductVMs;
 using RestaurantProjectWebsite.Core.ViewModels.RestaurantsVMs;
 using RestaurantProjectWebsite.Infrastructure.Data.Enums;
 using RestaurantProjectWebsite.Infrastructure.Data.Models;
@@ -21,16 +22,27 @@ namespace RestaurantProjectWebsite.Core.Services
             repo= _repo;
           
         }
-        public async Task<bool> AddRestaurant(string RestaurantId)
+        public async Task<bool> AddRestaurant(RestaurantVM restaurantVM)
         {
-            var restaurant = await repo.GetByIdAsync<Restaurant>(RestaurantId);
-            if (restaurant == null)
+            Restaurant restaurant = new Restaurant();
+            if (restaurantVM == null)
             {
-                throw new ArgumentException("There was no restaurant with that Id");
+                return false;
             }
-            restaurant.Request = false;
+
+            restaurant.Name = restaurantVM.Name;
+            restaurant.Name = restaurantVM.Name;
+            restaurant.Address = restaurantVM.Address;
+            restaurant.Phone = restaurantVM.Phone;
+            restaurant.Capacity = restaurantVM.Capacity;
+            restaurant.Category = (RestaurantCategory)Enum.Parse(typeof(RestaurantCategory), restaurantVM.Category);
+            restaurant.Request = true;
+
+
+            await repo.AddAsync<Restaurant>(restaurant);
             await repo.SaveChangesAsync();
             return true;
+
 
         }
 
@@ -82,6 +94,11 @@ namespace RestaurantProjectWebsite.Core.Services
         {
             var restaurant = await repo.GetByIdAsync<Restaurant>(id);
 
+            if(restaurant == null)
+            {
+                throw new Exception("No restaurant");
+            }
+
             RestaurantVM restaurantVM = new RestaurantVM()
             {
                 Id = restaurant.Id.ToString(),
@@ -106,8 +123,10 @@ namespace RestaurantProjectWebsite.Core.Services
             {
                 throw new ArgumentException("There was no restaurant with that Id");
             }
+
             await repo.DeleteAsync<Restaurant>(id);
             await repo.SaveChangesAsync();
+
             return true;
         }
 

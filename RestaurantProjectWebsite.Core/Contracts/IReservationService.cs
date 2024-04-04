@@ -9,7 +9,7 @@ namespace RestaurantProjectWebsite.Core.Contracts
 {
     public interface IReservationService
     {
-        Task<ReservationVM> GetReservationsById(string id);
+        Task<ReservationVM> GetReservationById(string id);
         List<ReservationVMShort> GetAllByUserId(string Id);
         List<ReservationVMShort> GetAllByRestaurantId(string Id);
         Task<bool> AddReservation(ReservationVM reservation, string restaurnatId);

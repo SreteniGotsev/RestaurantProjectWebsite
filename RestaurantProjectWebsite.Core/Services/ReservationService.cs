@@ -35,6 +35,7 @@ namespace RestaurantProjectWebsite.Core.Services
             reservation.Date = reservationVM.Date;
             reservation.SpecalRequirements = reservationVM.SpecalRequirements;
             
+            
             foreach (var occasion in reservationVM.Ocasions)
             {
                 reservation.Ocasions.Add((Ocasions)Enum.Parse(typeof(Ocasions), occasion));
@@ -81,6 +82,7 @@ namespace RestaurantProjectWebsite.Core.Services
                     Name = reservation.Name,
                     NumberOfPeople = reservation.NumberOfPeople,
                     Phone = reservation.Phone
+
                 };
 
                 reservationVMs.Add(reservationVM);
@@ -89,9 +91,14 @@ namespace RestaurantProjectWebsite.Core.Services
             return reservationVMs;
         }
 
-        public async Task<ReservationVM> GetReservationsById(string Id)
+        public async Task<ReservationVM> GetReservationById(string Id)
         {
             var reservation = await repo.GetByIdAsync<Reservation>(Id);
+
+            if(reservation == null)
+            {
+                throw new Exception("No reservation with this Id");
+            }
 
             ReservationVM reservationVM = new ReservationVM()
             {
@@ -113,13 +120,13 @@ namespace RestaurantProjectWebsite.Core.Services
 
         public async Task<bool> RemoveReservation(string Id)
         {
-            var product = await repo.GetByIdAsync<Reservation>(Id);
-            if (product == null)
+            var reservation = await repo.GetByIdAsync<Reservation>(Id);
+            if (reservation == null)
             {
                 return false;
             }
 
-            await repo.DeleteAsync<Product>(Id);
+            await repo.DeleteAsync<Reservation>(Id);
             await repo.SaveChangesAsync();
 
             return true;
