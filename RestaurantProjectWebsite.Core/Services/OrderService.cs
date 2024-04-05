@@ -39,26 +39,28 @@ namespace RestaurantProjectWebsite.Core.Services
 
             foreach (var product in orderVM.Products)
             {
-                var productM = await repo.GetByIdAsync<Product>(product.Key.Id);
+                var productM = await repo.GetByIdAsync<Product>(product.Product.Id);
+
                 if (productM == null)
                 {
                     throw new Exception("We couldn't find a product to be added to the order");
                 }
 
-                if (!order.Products.ContainsKey(productM))
-                {
-                    order.Products.Add(productM, 1);
-                }
-                else if (order.Products[productM]>10)
+                ProductsPerOrder productOrder = new ProductsPerOrder();
+                productOrder.Product = productM;
+                productOrder.ProductId = productM.Id;
+                productOrder.OrderId = order.Id;
+                productOrder.Order = order;
+
+                if (int.Parse(product.Quantity) > 10)
                 {
                     throw new Exception("You can't order the same product more than 10 times");
                 }
-                else
-                {
-                    order.Products[productM]++;
-                }
 
-                order.TotalPrice += productM.Price;
+                productOrder.Quantity = int.Parse(product.Quantity);
+             
+                order.Products.Add(productOrder);
+
             }
 
 
@@ -89,23 +91,23 @@ namespace RestaurantProjectWebsite.Core.Services
 
             foreach (var product in order.Products)
             {
-                    ProductVMShort productVM = new ProductVMShort()
-                    {
-                        Id = product.Key.Id.ToString(),
-                        Name = product.Key.Name,
-                        Price = product.Key.Price,
-                        ProductType = product.Key.ProductType.ToString(),
-                        SubProductType = product.Key.ProductType.ToString(),
-                    };
+                ProductVMShort productVM = new ProductVMShort()
+                {
+                    Id = product.Product.Id.ToString(),
+                    Name = product.Product.Name,
+                    Price = product.Product.Price,
+                    ProductType = product.Product.ProductType.ToString(),
+                    SubProductType = product.Product.SubProductType.ToString(),
+                };
 
-                if (!orderVM.Products.ContainsKey(productVM))
+                ProductPerOrderVM productOrderVM = new ProductPerOrderVM()
                 {
-                    orderVM.Products.Add(productVM, 1);
-                }
-                else
-                {
-                    orderVM.Products[productVM]++;
-                }
+                    Product = productVM,
+                    Quantity = product.Quantity.ToString(),
+                };
+
+                orderVM.Products.Add(productOrderVM);
+                
             }
 
             return orderVM;
@@ -120,8 +122,8 @@ namespace RestaurantProjectWebsite.Core.Services
             {
                 OrderVMShort orderVM = new OrderVMShort()
                 {
-                    Id= order.Id.ToString(),
-                    UserId= order.UserId,
+                    Id = order.Id.ToString(),
+                    UserId = order.UserId,
                     CreatedDate = order.CreatedDate,
                     RestaurantId = order.RestaurantId.ToString(),
                     TotalPrice = order.TotalPrice.ToString(),

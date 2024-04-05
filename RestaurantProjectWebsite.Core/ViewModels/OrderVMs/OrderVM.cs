@@ -15,7 +15,7 @@ namespace RestaurantProjectWebsite.Core.ViewModels.OrderVMs
     {
         public string Id { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public IDictionary<ProductVMShort,int>? Products { get; set; }
+        public List<ProductPerOrderVM>? Products { get; set; }
         public string RestaurantId { get; set; }
         public string UserId { get; set; }
         public string PaymentType { get; set; }
