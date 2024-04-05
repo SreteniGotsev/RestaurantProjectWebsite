@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RestauranProjectWebsite.Infrastructure.Data;
 using RestauranProjectWebsite.Infrastructure.Repositories;
 using RestaurantProjectWebsite.Core.Contracts;
+using RestaurantProjectWebsite.Core.ModelBinders;
 using RestaurantProjectWebsite.Core.Services;
 using RestaurantProjectWebsite.Infrastructure.Data;
 using Swashbuckle.AspNetCore.Filters;
@@ -19,7 +21,11 @@ namespace RestaurantProjectWebsite.Server
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+                //options.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
